@@ -1,4 +1,4 @@
-import pymongo
+import pymongo, os, sys, pickle
 
 class Employee():
     def __init__(self, id, firstName, lastName, hireYear):
@@ -9,11 +9,6 @@ class Employee():
 
     def __str__(self):
         return f'{self.id} - {self.firstName} {self.lastName} - {self.hireYear}'
-
-class LargeEmployee(Employee):
-    def __init__(self, someData):
-        super().__init__()
-        self.someData = tuple(someData)
 
 def getDatabase(db, collection):
     #Getting acces to the localhost Mongodb
@@ -35,7 +30,7 @@ def getDatabase(db, collection):
         getDatabase(db, collection)
 
 def createEmployee(employeeInfo):
-    employees = getDatabase('7', 'test')
+    employees = getDatabase('Employee_DB', 'Employees')
     all_employee_ids = []
 
     try:
@@ -56,16 +51,16 @@ def createEmployee(employeeInfo):
         createEmployee(employeeInfo)
 
 def findEmployee(employeeId):
-    employees = getDatabase('7', 'test')
+    employees = getDatabase('Employee_DB', 'Employees')
 
     for employee in employees.find():
         if employeeId == employee['_id']:
-            return employee
+            return Employee(employee['_id'], employee['fname'], employee['lname'], employee['hireYear'])
 
     return False
 
 def deleteEmployee(employeeId):
-    employees = getDatabase('7', 'test')
+    employees = getDatabase('Employee_DB', 'Employees')
 
     for employee in employees.find():
         if employeeId == employee['_id']:
@@ -75,20 +70,47 @@ def deleteEmployee(employeeId):
     return False
 
 def updateEmployee(employeeInfo):
-    employees = getDatabase('7', 'test')
+    employees =  getDatabase('Employee_DB', 'Employees')
 
     for employee in employees.find():
         if employeeInfo[0] == employee['_id']:
-
             myQuery = {'_id': employee['_id']}
-            newQuery = {'$set', {'fname': employeeInfo[0]}}
-            employees.find_one_and_update(myQuery, newQuery)
+
+            i = 0
+            while i < 3:
+
+                if i == 0:
+                    key = 'fname'
+                elif i == 1:
+                    key = 'lname'
+                else:
+                    key = 'hireYear'
+                newQuery = {'$set':{key: employeeInfo[i + 1]}}
+
+                employees.find_one_and_update(myQuery, newQuery)
+                i += 1
+
+            return True
 
     return False
 
-    #getting a list of id, name(s), and hire year
-createEmployee('test')
-updateEmployee('tact')
+def importAllEmployees(path):
+    files = os.listdir(path)
+    all_employees = dict()
+    for ser_file in files:
+        employeeInfo = []
+        with open(path + ser_file, 'rb') as file:
+            all_employees[int(ser_file.replace('.ser', ''))] = pickle.load(file)
 
-# if __name__ == '__main__':
-#     get_database()
+        employeeInfo.append(all_employees[int(ser_file.replace('.ser', ''))].id)
+        employeeInfo.append(all_employees[int(ser_file.replace('.ser', ''))].firstName)
+        employeeInfo.append(all_employees[int(ser_file.replace('.ser', ''))].lastName)
+        employeeInfo.append(all_employees[int(ser_file.replace('.ser', ''))].hireYear)
+
+        print(employeeInfo)
+        createEmployee(employeeInfo)
+
+#importAllEmployees('Assignment 1 - data/people/long serialized/')
+
+if __name__ == '__main__':
+    print(findEmployee(10000))
