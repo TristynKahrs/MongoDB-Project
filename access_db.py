@@ -35,24 +35,16 @@ def getDatabase(db, collection):
 
 def createEmployee(employeeInfo):
     employees = getDatabase('Employee_DB', 'Employees')
-    all_employee_ids = []
-
     try:
-        for employee in employees.find():
-            all_employee_ids.append(employee["_id"])
-
-        if len(all_employee_ids) == 0:
-            new_id = employeeInfo[0]
-        else:
-            if employeeInfo[0] in all_employee_ids:
-                new_id = max(all_employee_ids) + 1
-            else:
-                new_id = employeeInfo[0]
-
-        new_employee = {'_id': new_id, 'fname': employeeInfo[1], 'lname':employeeInfo[2], 'hireYear':employeeInfo[3]}
+        new_employee = {'_id': int(employeeInfo[0]), 'fname': employeeInfo[1], 'lname':employeeInfo[2], 'hireYear':int(employeeInfo[3])}
         employees.insert_one(new_employee)
     except:
-        createEmployee(employeeInfo)
+        all_employee_ids = []
+        for employee in employees.find():
+            all_employee_ids.append(employee["_id"])
+        new_id = max(all_employee_ids) + 1
+        new_employee = {'_id': new_id, 'fname': employeeInfo[1], 'lname':employeeInfo[2], 'hireYear':employeeInfo[3]}
+        employees.insert_one(new_employee)
 
 def findEmployee(employeeId):
     employees = getDatabase('Employee_DB', 'Employees')

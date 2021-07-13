@@ -1,5 +1,5 @@
 from os import system
-# from access_db import *
+from access_db import *
 system('echo off')
 def clearScreen():
     system('cls')
@@ -33,13 +33,23 @@ while looping:
     elif lower in ['add','update']:
         if len(list_input) == 5:
             del list_input[0]
+            try:
+                list_input = int(list_input[0])
+                print(type(list_input[0]))
+            except:
+                print('Invalid ID, must be a numberic value')
+
             if lower == 'add':
-                # createEmployee(list_input)
-                # print(f'Employee {id} has been successfully created')
-                pass
+                if createEmployee(list_input):
+                    print(f'Employee {id} has been successfully created')
+                else:
+                    print('Invalid ID, must be a numberic value')
             elif lower == 'update':
-                pass
-                # updateEmployee(list_input)
+                if updateEmployee(list_input):
+                    print(f'Employee {id} has been successfully updated')
+                else:
+                    print(f'We could not find an Employee with ID: {id}')
+
         else:
             print("format:: add [id] [first name] [last name] [hire year]")
 
@@ -49,23 +59,21 @@ while looping:
             try:
                 id = int(id)
                 if lower == 'find':
-                    # employee = findEmployee(id)
-                    # if employee == False:
-                    #     print("We could not find that employee")
-                    # else:
-                    #     print(employee)
-                    pass
+                    employee = findEmployee(id)
+                    if employee == False:
+                        print("We could not find that employee")
+                    else:
+                        print(employee)
                 elif lower == 'delete':
-                    # if deleteEmployee(id):
-                    #     print(f'Employee {id} has been successfully removed')
-                    # else:
-                    #     print(f'Employee {id} could not be found')
-                    pass
+                    if deleteEmployee(id):
+                        print(f'Employee {id} has been successfully removed')
+                    else:
+                        print(f'Employee {id} could not be found')
             except:
                 print(f'format:: {lower} [(whole number)]')
 
     else:
         print('That command is not recognized, use [help] to see available commands')
 
-print('bye')
+print('bye :c')
 exit()
