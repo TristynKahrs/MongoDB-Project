@@ -34,8 +34,9 @@ while looping:
         if len(list_input) == 5:
             del list_input[0]
             if lower == 'add':
-                createEmployee(list_input)
-                print(f'Employee {id} has been successfully created')
+                # createEmployee(list_input)
+                # print(f'Employee {id} has been successfully created')
+                pass
             elif lower == 'update':
                 pass
                 # updateEmployee(list_input)
@@ -48,16 +49,18 @@ while looping:
             try:
                 id = int(id)
                 if lower == 'find':
-                    employee = findEmployee(id)
-                    if employee == False:
-                        print("We could not find that employee")
-                    else:
-                        print(employee)
+                    # employee = findEmployee(id)
+                    # if employee == False:
+                    #     print("We could not find that employee")
+                    # else:
+                    #     print(employee)
+                    pass
                 elif lower == 'delete':
-                    if deleteEmployee(id):
-                        print(f'Employee {id} has been successfully removed')
-                    else:
-                        print(f'Employee {id} could not be found')
+                    # if deleteEmployee(id):
+                    #     print(f'Employee {id} has been successfully removed')
+                    # else:
+                    #     print(f'Employee {id} could not be found')
+                    pass
             except:
                 print(f'format:: {lower} [(whole number)]')
 
