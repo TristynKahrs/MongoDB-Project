@@ -10,6 +10,10 @@ class Employee():
     def __str__(self):
         return f'{self.id} - {self.firstName} {self.lastName} - {self.hireYear}'
 
+def onStart():
+    getDatabase('Employee_DB', 'Employees')
+    importAllEmployees('long serialized/')
+
 def getDatabase(db, collection):
     #Getting acces to the localhost Mongodb
     local_db_connect = pymongo.MongoClient('mongodb://localhost:27017/')
@@ -113,4 +117,4 @@ def importAllEmployees(path):
 #importAllEmployees('Assignment 1 - data/people/long serialized/')
 
 if __name__ == '__main__':
-    print(findEmployee(10000))
+    onStart()
