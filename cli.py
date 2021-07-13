@@ -1,5 +1,5 @@
 from os import system
-from access_db import *
+# from access_db import *
 system('echo off')
 def clearScreen():
     system('cls')
