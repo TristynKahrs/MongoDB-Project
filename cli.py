@@ -34,24 +34,20 @@ while looping:
         if len(list_input) == 5:
             del list_input[0]
             try:
-                list_input = int(list_input[0])
-                print(type(list_input[0]))
+                list_input[0] = int(list_input[0])
+                list_input[3] = int(list_input[3])
+                if lower == 'add':
+                    createEmployee(list_input)
+                    print(f'Employee has been successfully created')
+                elif lower == 'update':
+                    if updateEmployee(list_input):
+                        print(f'Employee {list_input[0]} has been successfully updated')
+                    else:
+                        print(f'We could not find an Employee with ID: {list_input[0]}')
             except:
-                print('Invalid ID, must be a numberic value')
-
-            if lower == 'add':
-                if createEmployee(list_input):
-                    print(f'Employee {id} has been successfully created')
-                else:
-                    print('Invalid ID, must be a numberic value')
-            elif lower == 'update':
-                if updateEmployee(list_input):
-                    print(f'Employee {id} has been successfully updated')
-                else:
-                    print(f'We could not find an Employee with ID: {id}')
-
+                print('Invalid values, ID and Hire Year must be a numeric value')
         else:
-            print("format:: add [id] [first name] [last name] [hire year]")
+            print(f"format:: {lower} [id] [first name] [last name] [hire year]")
 
     elif lower in ['find', 'delete']:
         if len(list_input) == 2:
@@ -60,10 +56,10 @@ while looping:
                 id = int(id)
                 if lower == 'find':
                     employee = findEmployee(id)
-                    if employee == False:
-                        print("We could not find that employee")
-                    else:
+                    if employee:
                         print(employee)
+                    else:
+                        print("We could not find that employee")
                 elif lower == 'delete':
                     if deleteEmployee(id):
                         print(f'Employee {id} has been successfully removed')
@@ -76,4 +72,5 @@ while looping:
         print('That command is not recognized, use [help] to see available commands')
 
 print('bye :c')
+system('echo on')
 exit()
